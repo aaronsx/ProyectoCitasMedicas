@@ -1,22 +1,17 @@
-const dniPaciente="aaaaaaaaaaa";
-const encontrado=true;
-class citas
+var dniPaciente="aaaaaaaaaaa";
+var encontrado=true;
+class Citas
 {
-	constructor(idCita, idPaciente,idMedico,IdPlanta,Motivo,idCentroMedico){
-
-		this.idCita = idCita;
-
-		this.idPacientes = idPaciente;
-
-		this.idMedico=idMedico;
-		
-		this.IdPlanta=IdPlanta;
-		
-		this.Motivo=Motivo;
-		
-		this.idCentroMedico=idCentroMedico;
-
-
+	constructor(idCita,idPaciente,dni_paciente,nombre_paciente,apellidos_paciente,centro_medico,consulta,nombre_Medico,fechaCita)
+	{
+		this.idCita=idCita;
+		this.idPaciente=idPaciente;
+		this.nombre_paciente=nombre_paciente;
+		this.apellidos_paciente=apellidos_paciente;
+		this.centro_medico=centro_medico;
+		this.consulta=consulta;
+		this.nombre_Medico=nombre_Medico;
+		this.fechaCita=fechaCita;
 	}
 	
 	
@@ -39,53 +34,117 @@ class Pacientes
 
 	}
 }
-class Medicos
+
+class ImplementacionCitas
 {
-	constructor(idMedico,nombre,apellido,idDespacho)
-	{
-
-		this.idMedico = idMedico;
-
-		this.nombre = nombre;
-
-		this.apellido=apellido;
-		
-		this.idDespacho = idDespacho;
-
-	}
-}
-
-
-class Despacho
-{
-	constructor(idDespacho,Planta,etiquetaPuerta,idCentroMedico){
-
-		this.idDespacho = idDespacho;
-
-		this.Planta = Planta;
-
-		this.etiquetaPuerta=etiquetaPuerta;
-		
-		this.idDespacho = idDespacho;
-
-	}
-}
-
-class CentroMedico
-{
-	constructor(idCentroMedico,Planta,etiquetaPuerta)
-	{
-
-		this.idCentroMedico = idCentroMedico;
-
-		this.Planta = Planta;
-
-		this.etiquetaPuerta=etiquetaPuerta;
-		
-		this.idDespacho = idDespacho;
-
-	}
 	
+		/**
+		*Metodo recibe una lista y añade un Objeto de tipo alumno a la lista con los parametros que se va pidiendo
+		 */
+		static CrearCita(listapaciente,listacitas)
+		{
+			//Se pide los atributos
+			var identificadorCita=CalcularId.calculaid(listacitas);
+			var nombre_paciente;
+			var apellido_paciente;
+			var idPaciente;
+			for(var i=0;i<listapaciente.length;i++)
+			{
+				 
+				if(listapaciente[i].DNI==dniPaciente)
+				{
+					 nombre_paciente=listapaciente[i].nombre;
+					 apellido_paciente=listapaciente[i].apellidos;
+					 idPaciente=listapaciente[i].identificadorPaciente;
+				}
+			}
+			var cita= new Citas(identificadorCita,idPaciente,dniPaciente,nombre_paciente,apellido_paciente,centro_medico,consulta,nombre_Medico,fechaCita);
+			listacitas.push(cita);
+			return listacitas;
+			
+		}
+		
+		
+
+		static FechaHora()//Fecha Hora aleatoria
+		{
+			let fechaActual = new Date()
+			let milisegundosFechaActual = fechaActual.getTime();
+			
+			
+			
+			//dias del 1 al 60
+			
+			let random = Math.random();
+		        random = random * 16 + 8;
+		        random = Math.trunc(random);
+		        console.log(random);
+		        
+		    if(random>16)
+		    	random=random-8
+		        
+		        
+			let sumarDias = Math.floor((Math.random()*60)+1);
+			
+			let milisegundosUnDia= 1*24*60*60*1000;
+			
+			let milisegundosNuevaFecha=milisegundosFechaActual+(sumarDias*milisegundosUnDia);
+			
+			
+			
+			nuevaFecha = new Date(milisegundosNuevaFecha);
+			
+
+			//horas del las 8 a las 18
+			let horas = Math.trunc((Math.random()*18)+8);
+			
+			
+			nuevaFecha.setHours(horas);
+			
+			return nuevaFecha;
+		
+		}
+		
+		
+		static IniciarSession(listapaciente)
+		{
+				var cuenta;
+				encontrado=false;
+				dniPaciente =prompt("Introduzca su DNI:");
+				//Si no esta vacia
+
+					//Se recorre el Array
+					for(var i=0;i<listapaciente.length;i++) 
+						{
+							if(listapaciente[i].DNI==dniPaciente)
+							{
+								alert("tienes cuenta");
+								encontrado=true;
+							}
+						}
+				
+
+					
+			if(!encontrado)
+			 {
+				 cuenta=Number(prompt("¿Tienes Cuenta? Si no tienes quieres crearla?: 1-Si Tengo cuenta 2-No tengo cuenta y quiero crearla"));
+				 switch(cuenta)
+				 {
+					 case 1:
+						 break;
+						 
+						 case 2:
+						ImplementacionPaciente.addPaciente(listapaciente);
+						break;
+						 
+				 }
+			 }
+			else{ MenuCitas(listapaciente);}
+				
+			
+		 
+		}
+			
 }
 
 class ImplementacionPaciente
@@ -94,28 +153,29 @@ class ImplementacionPaciente
 		/**
 		*Metodo recibe una lista y añade un Objeto de tipo alumno a la lista con los parametros que se va pidiendo
 		 */
-		static addPaciente(bd)
+		static addPaciente(listapaciente)
 		{
 			//Se pide los atributos
-			var identificadorPaciente=CalcularId.calculaid(bd);
+			var identificadorPaciente=CalcularId.calculaid(listapaciente);
 			var nombre =prompt("Introduzca su nombre:");
 			var apellidos =prompt("Introduzca sus apellidos:");
 			var DNI =prompt("Introduzca su DNI:");
 			
 			var telefono =Number(prompt("Introduzca su telefono:"));
 			//Buscar DNI
-			for(var i=0;i<bd.length;i++) 
-			if(bd[i].DNI==DNIPaciente)
+			for(var i=0;i<listapaciente.length;i++) 
+			if(listapaciente[i].DNI==DNI)
 			{
 				alert("tienes cuenta");
 				encontrado=true;
 			}
 			//Se crea el tipo paciente
-			if(!encontrado){bd.push(paciente);}
-			else{IniciarSession(bd)}
-			//Se añade al array
+			var paciente= new Pacientes(identificadorPaciente,DNI,nombre,apellidos,telefono);
+			if(!encontrado)
+			{listapaciente.push(paciente);}
 			
-			return bd;
+			
+			return listapaciente;
 			
 		}
 		
@@ -123,40 +183,43 @@ class ImplementacionPaciente
 		
 		
 		
-		static IniciarSession(bd)
+		static IniciarSession(listapaciente)
 		{
-			var cuenta;
-			encontrado=false;
-			dniPaciente =prompt("Introduzca su DNI:");
-			//Si no esta vacia
-			if(bd.length!=0)
-			{
-				//Se recorre el Array
-				for(var i=0;i<bd.length;i++) 
-					if(bd[i].DNI==DNIPaciente)
-					{
-						alert("tienes cuenta");
-						encontrado=true;
-					}
-			}
-			else
-				alert("No hay ningun paciente");
+				var cuenta;
+				encontrado=false;
+				dniPaciente =prompt("Introduzca su DNI:");
+				//Si no esta vacia
+
+					//Se recorre el Array
+					for(var i=0;i<listapaciente.length;i++) 
+						{
+							if(listapaciente[i].DNI==dniPaciente)
+							{
+								alert("tienes cuenta");
+								encontrado=true;
+								
+							}
+						}
 				
-		if(!encontrado)
-		 {
-			 cuenta=Number(prompt("¿Tienes Cuenta? Si no tienes quieres crearla?: 1-Si Tengo cuenta 2-No tengo cuenta y quiero crearla"));
-			 switch(cuenta)
+
+					
+			if(!encontrado)
 			 {
-				 case 1:
-					 break;
-					 
-					 case 2:
-					addPaciente(bd);
-					break;
-					 
+				 cuenta=Number(prompt("¿Tienes Cuenta? Si no tienes quieres crearla?: 1-Si Tengo cuenta 2-No tengo cuenta y quiero crearla"));
+				 switch(cuenta)
+				 {
+					 case 1:
+						 break;
+						 
+						 case 2:
+						ImplementacionPaciente.addPaciente(listapaciente);
+						break;
+						 
+				 }
 			 }
-		 }
-		 else{ document.location.assing('../Citas.html');}
+			else{ MenuCitas(listapaciente);}
+				
+			
 		 
 		}
 			
@@ -171,17 +234,17 @@ class CalcularId
 		/**
 	 	* Metodo para calcular las ids
 	 	*/
-		static calculaid(bd)
+		static calculaid(listapaciente)
 		{
 			
 			//Si no esta vacia
-			if(bd.length!=0)
+			if(listapaciente.lenght!=0)
 			{
 				var id=0;
 				//Se reccore la lista para comprobar que id tienen y darles el siguiente
-					 for(var i=0;i<bd.length;i++) 
+					 for(var i=0;i<listapaciente.length;i++) 
 					 {
-						 var j=bd[i].idAlumno;
+						 var j=listapaciente[i].identificadorPaciente;
 						 if(id<j)
 							 id=j;
 					 }
@@ -192,7 +255,52 @@ class CalcularId
 				return 0+1;
 			}
 }
-
+function MenuInicio()
+{
+	 var listapaciente=[];
+	 var opcion;
+	 do
+	 {
+	  	opcion =Number(prompt("1-Iniciar Sesion/n 2-Crear Session"));
+	 
+	 	switch(opcion)
+	 	{
+			case 1:
+				 ImplementacionPaciente.IniciarSession(listapaciente);
+				 break;
+			case 2:
+				 ImplementacionPaciente.addPaciente(listapaciente);
+				 break;
+			
+		 }
+	
+	 }while(opcion!=0);
+ 
+}
+function MenuCitas(listapaciente)
+{
+	 var listacitas=[];
+	 var opcion;
+	 do
+	 {
+	  	opcion =Number(prompt("1-Crear Citas/n 2-Eliminar Citas /n 3-Mostrar Citas"));
+	 
+	 	switch(opcion)
+	 	{
+			case 1:
+				 ImplementacionCitas.CrearCita(listapaciente,listacitas);
+				 break;
+			case 2:
+				 ImplementacionCitas.eliminarCita(listapaciente,listacitas);
+				 break;
+			case 3:
+				 ImplementacionCitas.MostrarCistas(listapaciente,listacitas);
+				 break;
+		 }
+	
+	 }while(opcion!=0);
+ 
+}
 
 
 
