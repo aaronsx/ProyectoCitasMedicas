@@ -58,6 +58,25 @@ class ImplementacionCitas
 					 idPaciente=listapaciente[i].identificadorPaciente;
 				}
 			}
+			if(idPaciente<=2)
+			{
+				nombre_Medico="Paca";
+				centro_medico="La plata";
+				consulta=3;
+			}
+			else if (idPaciente>2&&idPaciente>50)
+			{
+				nombre_Medico="Paco";
+				centro_medico="Centro de salud Amate";
+				consulta=2;
+			}
+			else
+			{
+				nombre_Medico="Juan";
+				centro_medico="Centro de salud Amate";
+				consulta=3;
+			}
+			var fechaCita=FechaHora();
 			var cita= new Citas(identificadorCita,idPaciente,dniPaciente,nombre_paciente,apellido_paciente,centro_medico,consulta,nombre_Medico,fechaCita);
 			listacitas.push(cita);
 			return listacitas;
@@ -116,8 +135,11 @@ class ImplementacionCitas
 					//Se recorre el Array
 					for(var i=0;i<listapaciente.length;i++) 
 						{
+							console.log("La id que recorre"+listapaciente[i].DNI);
+							console.log("La id que pìde"+dniPaciente);
 							if(listapaciente[i].DNI==dniPaciente)
 							{
+								
 								alert("tienes cuenta");
 								encontrado=true;
 							}
@@ -160,20 +182,22 @@ class ImplementacionPaciente
 			var nombre =prompt("Introduzca su nombre:");
 			var apellidos =prompt("Introduzca sus apellidos:");
 			var DNI =prompt("Introduzca su DNI:");
-			
+			encontrado=false;
 			var telefono =Number(prompt("Introduzca su telefono:"));
 			//Buscar DNI
 			for(var i=0;i<listapaciente.length;i++) 
-			if(listapaciente[i].DNI==DNI)
+			{
+				if(listapaciente[i].DNI==DNI)
 			{
 				alert("tienes cuenta");
 				encontrado=true;
 			}
+			}
+			
 			//Se crea el tipo paciente
 			var paciente= new Pacientes(identificadorPaciente,DNI,nombre,apellidos,telefono);
-			if(!encontrado)
-			{listapaciente.push(paciente);}
 			
+			if(!encontrado){listapaciente.push(paciente);}
 			
 			return listapaciente;
 			
@@ -185,7 +209,6 @@ class ImplementacionPaciente
 		
 		static IniciarSession(listapaciente)
 		{
-				var cuenta;
 				encontrado=false;
 				dniPaciente =prompt("Introduzca su DNI:");
 				//Si no esta vacia
@@ -195,7 +218,7 @@ class ImplementacionPaciente
 						{
 							if(listapaciente[i].DNI==dniPaciente)
 							{
-								alert("tienes cuenta");
+								alert("Hola "+listapaciente[i].nombre);
 								encontrado=true;
 								
 							}
